@@ -3,6 +3,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.stream.Collectors;
+
 /**
  * Sequence may produce many elements, but we are not always interested in all of them. In this chapter we will learn
  * how to filter elements from a sequence.
@@ -27,6 +29,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void girls_are_made_of_sugar_and_spice() {
         Flux<String> shortListed = popular_girl_names_service()
+                .filter(name -> name.length() <= 4)
                 //todo: change this line only
                 ;
 
@@ -42,6 +45,8 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void needle_in_a_haystack() {
         Flux<Object> strings = mashed_data_service()
+                .ofType(String.class)
+                .cast(Object.class)
                 //todo: change this line only
                 ;
 
@@ -56,6 +61,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void economical() {
         Flux<String> items = duplicated_records_service()
+                .distinct()
                 //todo: change this line only, use only one operator
                 ;
 
@@ -74,7 +80,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     public void watch_out_for_the_spiders() {
         //todo: change code as you need
         Mono<String> firstResult = Mono.empty();
-        fragile_service();
+        firstResult = fragile_service().elementAt(0);
 
         //don't change code below
         StepVerifier.create(firstResult)
@@ -88,7 +94,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void dont_take_more_then_you_need() {
         Flux<Integer> numbers = number_service()
-                //todo: change this line only
+                .take(100)
                 ;
 
         StepVerifier.create(numbers)
@@ -102,7 +108,7 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void not_a_binary_search() {
         Flux<Integer> numbers = number_service()
-                //todo: change this line only
+                .takeLast(100)
                 ;
 
         StepVerifier.create(numbers)
@@ -117,7 +123,8 @@ public class c3_FilteringSequence extends FilteringSequenceBase {
     @Test
     public void golden_middle() {
         Flux<Integer> numbers = number_service()
-                //todo: do your changes here
+                .skip(149)
+                .take(100)
                 ;
 
         StepVerifier.create(numbers)
